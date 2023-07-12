@@ -1,5 +1,8 @@
 use reqwest::{Client, Method, Response};
-
+use shared::question::Question;
+use shared::question::QuestionId;
+use shared::question::CreateQuestion;
+use shared::question::GetQuestionById;
 /// example code
 ///
 /// Create a reqwest client
@@ -27,6 +30,28 @@ use reqwest::{Client, Method, Response};
 async fn main() {
     // Create a reqwest client
     let client = Client::new();
+
+    let question = Question {
+        id: QuestionId(1),
+        title: "Example Title".to_string(),
+        content: "Example Content".to_string(),
+        tags: Some(vec!["tag1".to_string(), "tag2".to_string()]),
+    };
+
+    let create_question = CreateQuestion {
+        title: question.title.clone(),
+        content: question.content.clone(),
+        tags: question.tags.clone(),
+    };
+
+    let res = client.post("http://localhost:8088/questions")
+        .json(&create_question)
+        .send()
+        .await;
+
+    let to_delete = GetQuestionById {
+        question_id: 2,
+    };
 
    // Your code here!
 }
